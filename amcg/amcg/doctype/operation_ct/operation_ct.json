@@ -1,0 +1,407 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2021-08-27 08:45:30.103822",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "operation_date",
+  "customer",
+  "patient_name",
+  "citizenship",
+  "file_no",
+  "id_no",
+  "hospital",
+  "doctor",
+  "consultant",
+  "cb_1",
+  "item_group",
+  "item_code",
+  "item_price",
+  "vat",
+  "vat_amount",
+  "clinic_name",
+  "contract_type",
+  "is_invoiced",
+  "discount_percent",
+  "discount_amount",
+  "net_amount",
+  "consumed_item_sb_section",
+  "nurse",
+  "operation_item",
+  "doctor_sb_section",
+  "intervention_type",
+  "catheter_type",
+  "operation_type",
+  "angiography_type",
+  "surgery_type",
+  "construction_type",
+  "repair_type",
+  "veins_used",
+  "sutures_removal_date",
+  "special_recommendations_observation",
+  "cb_2",
+  "observation",
+  "location",
+  "first_calculation_after_intervention",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "OP-.YY.-.MM.-.#"
+  },
+  {
+   "default": "Today",
+   "fieldname": "operation_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Operation Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name"
+  },
+  {
+   "fieldname": "citizenship",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Citizenship",
+   "options": "Saudi\nNon-Saudi",
+   "reqd": 1
+  },
+  {
+   "fieldname": "file_no",
+   "fieldtype": "Data",
+   "label": "File No"
+  },
+  {
+   "fieldname": "id_no",
+   "fieldtype": "Data",
+   "label": "ID No"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item Group",
+   "options": "Item Group",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_price",
+   "fieldtype": "Currency",
+   "label": "Item Price"
+  },
+  {
+   "fieldname": "vat",
+   "fieldtype": "Link",
+   "label": "VAT",
+   "options": "Item Tax Template"
+  },
+  {
+   "fieldname": "vat_amount",
+   "fieldtype": "Currency",
+   "label": "VAT Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "clinic_name",
+   "fieldtype": "Data",
+   "label": "Clinic Name"
+  },
+  {
+   "fieldname": "hospital",
+   "fieldtype": "Link",
+   "label": "Hospital",
+   "options": "Hospital CT"
+  },
+  {
+   "fieldname": "contract_type",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Contract Type",
+   "options": "Monthly Fixed Amount\nPer-Operation\nMonthly-per-Operation"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "is_invoiced",
+   "fieldtype": "Check",
+   "label": "Is Invoiced",
+   "read_only": 1
+  },
+  {
+   "fieldname": "doctor",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Doctor",
+   "options": "Doctor CT"
+  },
+  {
+   "fieldname": "consultant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Consultant",
+   "options": "Consultant CT"
+  },
+  {
+   "default": "0",
+   "fieldname": "discount_percent",
+   "fieldtype": "Percent",
+   "label": "Discount Percent"
+  },
+  {
+   "default": "0",
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "label": "Discount Amount"
+  },
+  {
+   "fieldname": "net_amount",
+   "fieldtype": "Currency",
+   "label": "Net Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "consumed_item_sb_section",
+   "fieldtype": "Section Break",
+   "label": "Consumed Item SB"
+  },
+  {
+   "fieldname": "nurse",
+   "fieldtype": "Table MultiSelect",
+   "label": "Nurse",
+   "options": "Nurse MS CT"
+  },
+  {
+   "fieldname": "operation_item",
+   "fieldtype": "Table",
+   "label": "Operation Item",
+   "options": "Operation Item CT"
+  },
+  {
+   "fieldname": "doctor_sb_section",
+   "fieldtype": "Section Break",
+   "label": "Doctor SB"
+  },
+  {
+   "fieldname": "intervention_type",
+   "fieldtype": "Select",
+   "label": "Intervention Type",
+   "options": "\nCatheter Insertion\nAngiography\nSurgery"
+  },
+  {
+   "depends_on": "eval:doc.intervention_type ==\"Catheter Insertion\"",
+   "fieldname": "catheter_type",
+   "fieldtype": "Select",
+   "label": "Catheter Type ",
+   "options": "\nTunnelled\nNon-Tunnelled"
+  },
+  {
+   "depends_on": "eval:doc.catheter_type ==\"Tunnelled\"",
+   "fieldname": "operation_type",
+   "fieldtype": "Select",
+   "label": "Operation Type",
+   "options": "\nExchange\nInsertion"
+  },
+  {
+   "depends_on": "eval:doc.intervention_type ==\"Angiography\"",
+   "fieldname": "angiography_type",
+   "fieldtype": "Select",
+   "label": "Angiography Type",
+   "options": "\nDiagnostic\nAngioplasty\nThrombectomy\nStent"
+  },
+  {
+   "depends_on": "eval:doc.intervention_type ==\"Surgery\"",
+   "fieldname": "surgery_type",
+   "fieldtype": "Select",
+   "label": "Surgery Type",
+   "options": "\nConstruction\nRepair"
+  },
+  {
+   "depends_on": "eval:doc.surgery_type ==\"Construction\"",
+   "fieldname": "construction_type",
+   "fieldtype": "Select",
+   "label": "Construction Type",
+   "options": "\nAVF\nAVG\nSuper"
+  },
+  {
+   "depends_on": "eval:doc.surgery_type ==\"Repair\"",
+   "fieldname": "repair_type",
+   "fieldtype": "Select",
+   "label": "Repair Type",
+   "options": "\nAVF\nAVG"
+  },
+  {
+   "depends_on": "eval:doc.surgery_type ==\"Construction\"",
+   "fieldname": "veins_used",
+   "fieldtype": "Data",
+   "label": "Veins Used"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "observation",
+   "fieldtype": "Small Text",
+   "label": "Observation"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "label": "Location"
+  },
+  {
+   "fieldname": "first_calculation_after_intervention",
+   "fieldtype": "Data",
+   "label": "First calculation after intervention"
+  },
+  {
+   "fieldname": "sutures_removal_date",
+   "fieldtype": "Date",
+   "label": "Sutures Removal Date"
+  },
+  {
+   "fieldname": "special_recommendations_observation",
+   "fieldtype": "Small Text",
+   "label": "Special Recommendations Observation"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Operation CT",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2021-08-27 08:58:44.586885",
+ "modified_by": "Administrator",
+ "module": "Amcg",
+ "name": "Operation CT",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Master Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
