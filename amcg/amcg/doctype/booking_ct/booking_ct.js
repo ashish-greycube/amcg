@@ -2,6 +2,30 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Booking CT', {
+	refresh: function (frm) {
+		if (frm.doc.docstatus!=2) {
+			frm.add_custom_button(__('Convert to Operation'),
+			function() {
+				
+				frappe.model.open_mapped_doc({
+					method: "amcg.amcg.doctype.booking_ct.booking_ct.make_operation",
+					frm: frm
+				});					
+			
+			}, __("Tools"));
+		}
+	},
+	item_code: function (frm) {
+		get_item_price(frm)
+	},
+	item_price: function (frm) {
+		calculate_vat_amount(frm)
+	
+	},
+	vat_amount: function (frm) {
+		calculate_net_amount(frm)
+
+	},
 	setup: function (frm) {
 		filter_item_based_on_item_group(frm)
 		set_price_list(frm)
@@ -11,9 +35,75 @@ frappe.ui.form.on('Booking CT', {
 	},
 	customer: function (frm) {
 		set_price_list(frm)
+	},
+	vat_tax_template: function (frm) {
+		calculate_vat_amount(frm)
+	},
+	citizenship: function (frm) {
+		if (frm.doc.citizenship == __('Non-Saudi')) {
+			frappe.db.get_single_value('AMCG Settings', 'item_tax_template')
+				.then(item_tax_template => {
+					frm.set_value('vat_tax_template', item_tax_template)
+				})
+		}else if (frm.doc.citizenship == __('Saudi')){
+			frm.set_value('vat_tax_template', '')
+			frm.set_value('vat_amount', flt(0.0))
+		}
 	}
-
 });
+
+function calculate_net_amount(frm) {
+	debugger
+	if (frm.doc.item_price) {
+		let net_amount = flt(frm.doc.item_price + frm.doc.vat_amount)
+		frm.set_value('net_amount', net_amount)
+		frm.refresh_field('net_amount')
+	}
+}
+
+function calculate_vat_amount(frm) {
+	if (frm.doc.item_price && frm.doc.vat_tax_template) {
+		frappe.call('amcg.amcg.doctype.booking_ct.booking_ct.get_tax_rate_for_item_template', {
+			item_template_name: frm.doc.vat_tax_template
+		}).then(r => {
+			console.log(r)
+			if (r.message) {
+				let vat_percentage = r.message
+				let vat_amount = flt(frm.doc.item_price * vat_percentage / 100.0)
+				frm.set_value('vat_amount', vat_amount)
+				calculate_net_amount(frm)
+			}
+		})
+
+	}else{
+		frm.set_value('vat_amount', flt(0.0))
+		calculate_net_amount(frm)
+	}
+}
+
+function get_item_price(frm) {
+	frappe.call({
+		method: 'amcg.amcg.doctype.booking_ct.booking_ct.get_price_list_rate_for',
+		args: {
+			args: {
+				customer: frm.doc.customer,
+				price_list: frm.doc.price_list,
+				qty: '1',
+				transaction_date: frm.doc.booking_date
+			},
+			item_code: frm.doc.item_code
+		},
+		freeze: true,
+		callback: (r) => {
+			// on success
+			frm.set_value('item_price', r.message)
+		},
+		error: (r) => {
+			// on error
+			console.log(r)
+		}
+	})
+}
 
 function filter_item_based_on_item_group(frm) {
 	if (frm.doc.item_group) {
@@ -29,25 +119,32 @@ function filter_item_based_on_item_group(frm) {
 }
 
 function set_price_list(frm) {
-if (frm.doc.customer) {
 	let default_price_list
-	frappe.db.get_value('Customer', frm.doc.customer, 'default_price_list')
+	if (frm.doc.customer) {
+		frappe.db.get_value('Customer', frm.doc.customer, 'default_price_list')
 			.then(r => {
-					default_price_list=r.message.default_price_list
-					if (!default_price_list) {
-						frappe.db.get_single_value('Selling Settings', 'selling_price_list')
+				default_price_list = r.message.default_price_list
+				if (default_price_list==null) {
+					frappe.db.get_single_value('Selling Settings', 'selling_price_list')
 						.then(selling_price_list => {
-							default_price_list=selling_price_list
+							console.log('selling_price_list',selling_price_list)
+							default_price_list = selling_price_list
 							if (default_price_list) {
-								frm.set_value('price_list', default_price_list)							
+								frm.set_value('price_list', default_price_list)
 							}
 						})
-									
-					}else{
-						frm.set_value('price_list', default_price_list)	
-					}
-			})	
-}	
 
-
+				} else {
+					frm.set_value('price_list', default_price_list)
+				}
+			})
+	}else{
+		frappe.db.get_single_value('Selling Settings', 'selling_price_list')
+		.then(selling_price_list => {
+			default_price_list = selling_price_list
+			if (default_price_list) {
+				frm.set_value('price_list', default_price_list)
+			}
+		})
+	}
 }

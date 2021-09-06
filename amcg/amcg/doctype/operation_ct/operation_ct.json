@@ -7,6 +7,7 @@
  "field_order": [
   "naming_series",
   "operation_date",
+  "status",
   "customer",
   "patient_name",
   "citizenship",
@@ -49,18 +50,12 @@
  ],
  "fields": [
   {
+   "default": "OP-.YY.-.MM.-.#",
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Series",
    "options": "OP-.YY.-.MM.-.#"
-  },
-  {
-   "default": "Today",
-   "fieldname": "operation_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Operation Date",
-   "reqd": 1
   },
   {
    "fieldname": "customer",
@@ -146,13 +141,11 @@
    "options": "Hospital CT"
   },
   {
-   "fetch_from": "customer.contract_type_cf",
    "fieldname": "contract_type",
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Contract Type",
-   "options": "Monthly Fixed Amount\nPer-Operation\nMonthly-per-Operation",
-   "read_only": 1
+   "options": "Monthly Fixed Amount\nPer-Operation\nMonthly-per-Operation"
   },
   {
    "allow_on_submit": 1,
@@ -232,7 +225,7 @@
    "options": "\nTunnelled\nNon-Tunnelled"
   },
   {
-   "depends_on": "eval:doc.catheter_type ==\"Tunnelled\"",
+   "depends_on": "eval:(doc.catheter_type ==\"Tunnelled\" && doc.intervention_type==\"Catheter Insertion\")",
    "fieldname": "operation_type",
    "fieldtype": "Select",
    "label": "Operation Type",
@@ -309,10 +302,24 @@
    "options": "Operation CT",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nSubmitted\nCancelled\nRe-Scheduled"
+  },
+  {
+   "default": "Today",
+   "fieldname": "operation_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Operation Date",
+   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2021-09-01 12:04:43.847081",
+ "modified": "2021-09-06 07:08:27.382084",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "Operation CT",
