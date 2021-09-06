@@ -59,7 +59,7 @@ def make_operation(source_name, target_doc=None):
 		"Booking CT": {
 			"doctype": "Operation CT",
 			"validation": {
-				"docstatus": ["=", 0]
+				"docstatus": ["=", 1]
 			}
 		}
 	}, target_doc)

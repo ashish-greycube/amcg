@@ -7,7 +7,6 @@
  "field_order": [
   "naming_series",
   "operation_date",
-  "status",
   "customer",
   "patient_name",
   "citizenship",
@@ -19,14 +18,16 @@
   "cb_1",
   "item_group",
   "item_code",
+  "price_list",
   "item_price",
-  "vat",
+  "vat_tax_template",
   "vat_amount",
   "clinic_name",
   "contract_type",
   "is_invoiced",
   "discount_percent",
   "discount_amount",
+  "item_price_after_discount",
   "net_amount",
   "consumed_item_sb_section",
   "nurse",
@@ -115,13 +116,8 @@
   {
    "fieldname": "item_price",
    "fieldtype": "Currency",
-   "label": "Item Price"
-  },
-  {
-   "fieldname": "vat",
-   "fieldtype": "Link",
-   "label": "VAT",
-   "options": "Item Tax Template"
+   "label": "Item Price",
+   "reqd": 1
   },
   {
    "fieldname": "vat_amount",
@@ -304,22 +300,33 @@
    "read_only": 1
   },
   {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nSubmitted\nCancelled\nRe-Scheduled"
-  },
-  {
    "default": "Today",
    "fieldname": "operation_date",
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Operation Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "vat_tax_template",
+   "fieldtype": "Link",
+   "label": "VAT",
+   "options": "Item Tax Template"
+  },
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "item_price_after_discount",
+   "fieldtype": "Currency",
+   "label": "Item Price After Discount"
   }
  ],
  "is_submittable": 1,
- "modified": "2021-09-06 07:08:27.382084",
+ "modified": "2021-09-06 15:39:40.606180",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "Operation CT",

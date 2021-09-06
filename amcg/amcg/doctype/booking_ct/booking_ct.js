@@ -3,7 +3,7 @@
 
 frappe.ui.form.on('Booking CT', {
 	refresh: function (frm) {
-		if (frm.doc.docstatus!=2) {
+		if (frm.doc.docstatus==1) {
 			frm.add_custom_button(__('Convert to Operation'),
 			function() {
 				
@@ -16,7 +16,9 @@ frappe.ui.form.on('Booking CT', {
 		}
 	},
 	item_code: function (frm) {
-		get_item_price(frm)
+		if (frm.doc.item_code) {
+			get_item_price(frm)
+		}
 	},
 	item_price: function (frm) {
 		calculate_vat_amount(frm)
@@ -29,6 +31,7 @@ frappe.ui.form.on('Booking CT', {
 	setup: function (frm) {
 		filter_item_based_on_item_group(frm)
 		set_price_list(frm)
+		frm.trigger('citizenship')
 	},
 	item_group: function (frm) {
 		filter_item_based_on_item_group(frm)
@@ -41,19 +44,20 @@ frappe.ui.form.on('Booking CT', {
 	},
 	citizenship: function (frm) {
 		if (frm.doc.citizenship == __('Non-Saudi')) {
-			frappe.db.get_single_value('AMCG Settings', 'item_tax_template')
-				.then(item_tax_template => {
-					frm.set_value('vat_tax_template', item_tax_template)
+			frappe.db.get_single_value('AMCG Settings', 'non_saudi_item_tax_template')
+				.then(non_saudi_item_tax_template => {
+					frm.set_value('vat_tax_template', non_saudi_item_tax_template)
 				})
 		}else if (frm.doc.citizenship == __('Saudi')){
-			frm.set_value('vat_tax_template', '')
-			frm.set_value('vat_amount', flt(0.0))
+			frappe.db.get_single_value('AMCG Settings', 'saudi_item_tax_template_zero_percent')
+				.then(saudi_item_tax_template_zero_percent => {
+					frm.set_value('vat_tax_template', saudi_item_tax_template_zero_percent)
+				})
 		}
 	}
 });
 
 function calculate_net_amount(frm) {
-	debugger
 	if (frm.doc.item_price) {
 		let net_amount = flt(frm.doc.item_price + frm.doc.vat_amount)
 		frm.set_value('net_amount', net_amount)
@@ -66,18 +70,11 @@ function calculate_vat_amount(frm) {
 		frappe.call('amcg.amcg.doctype.booking_ct.booking_ct.get_tax_rate_for_item_template', {
 			item_template_name: frm.doc.vat_tax_template
 		}).then(r => {
-			console.log(r)
-			if (r.message) {
 				let vat_percentage = r.message
 				let vat_amount = flt(frm.doc.item_price * vat_percentage / 100.0)
 				frm.set_value('vat_amount', vat_amount)
 				calculate_net_amount(frm)
-			}
 		})
-
-	}else{
-		frm.set_value('vat_amount', flt(0.0))
-		calculate_net_amount(frm)
 	}
 }
 

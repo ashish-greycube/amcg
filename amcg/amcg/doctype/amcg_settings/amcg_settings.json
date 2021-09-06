@@ -5,7 +5,9 @@
  "engine": "InnoDB",
  "field_order": [
   "monthly_fixed_amount_item",
-  "item_tax_template"
+  "column_break_2",
+  "non_saudi_item_tax_template",
+  "saudi_item_tax_template_zero_percent"
  ],
  "fields": [
   {
@@ -17,16 +19,28 @@
    "reqd": 1
   },
   {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
    "description": "for Non-Saudi Citizens",
-   "fieldname": "item_tax_template",
+   "fieldname": "non_saudi_item_tax_template",
    "fieldtype": "Link",
-   "label": "Item Tax Template",
+   "label": "Non-Saudi Item Tax Template",
+   "options": "Item Tax Template",
+   "reqd": 1
+  },
+  {
+   "description": "for Saudi Citizens with zero percent",
+   "fieldname": "saudi_item_tax_template_zero_percent",
+   "fieldtype": "Link",
+   "label": "Saudi Item Tax Template",
    "options": "Item Tax Template",
    "reqd": 1
   }
  ],
  "issingle": 1,
- "modified": "2021-09-02 14:42:23.465460",
+ "modified": "2021-09-06 14:00:27.906278",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "AMCG Settings",

@@ -11,7 +11,6 @@ from frappe.model.mapper import get_mapped_doc
 
 class OperationCT(Document):
 	def on_submit(self):
-		self.set_status()
 		if len(self.operation_item)>0:
 			stock_entry=self.make_stock_entry()
 			success_msg = _('Stock Entry {0} created').format(
@@ -26,13 +25,8 @@ class OperationCT(Document):
 			frappe.msgprint(success_msg, title=_('Success'), indicator='green')					
 
 	def on_cancel(self):
-		self.set_status()
+		pass
 
-	def set_status(self):
-		if self.docstatus==1:
-			self.status='Submitted'
-		elif self.docstatus==2:
-			self.status='Cancelled'
 
 
 	def make_stock_entry(self):
@@ -81,7 +75,9 @@ class OperationCT(Document):
 		si.append("items", {
 			"item_code": monthly_fixed_amount_item,
 			"qty": 1,
-			"rate":self.net_amount,
+			"rate":self.item_price_after_discount,
+			"base_rate":self.item_price_after_discount,
+			"item_tax_template":self.vat_tax_template,
 			"reference_operation_ct":self.name
 		})
 		si.set_missing_values()
@@ -94,7 +90,9 @@ def make_sales_invoice_for_monthly_per_operation(source_name, target_doc=None, i
 		si_item =target.append('items')
 		si_item.item_code=source.item_code
 		si_item.qty=1
-		si_item.rate=source.net_amount
+		si_item.rate=source.item_price_after_discount
+		si_item.base_rate=source.item_price_after_discount
+		si_item.item_tax_template=source.vat_tax_template
 		si_item.reference_operation_ct=source.name
 		set_missing_values(source, target)
 
