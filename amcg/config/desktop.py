@@ -7,8 +7,8 @@ def get_data():
 		{
 			"module_name": "Amcg",
 			"color": "red",
-			"icon": "octicon octicon-container",
+			"icon": "fa fa-trophy",
 			"type": "module",
-			"label": _("Amcg")
+			"label": _("AMCG")
 		}
 	]

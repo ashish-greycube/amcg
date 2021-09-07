@@ -7,6 +7,7 @@ frappe.ui.form.on('Operation CT', {
 			let discount_amount=flt((frm.doc.item_price*frm.doc.discount_percent)/100)
 			let item_price_after_discount=flt(frm.doc.item_price-discount_amount)
 			frm.set_value('item_price_after_discount',item_price_after_discount)
+			calculate_vat_amount(frm)
 			let net_amount=flt(item_price_after_discount+frm.doc.vat_amount)
 			frm.set_value('net_amount',net_amount)
 			frm.set_value("discount_amount", discount_amount)
@@ -17,6 +18,7 @@ frappe.ui.form.on('Operation CT', {
 				let discount_amount=frm.doc.discount_amount
 				let item_price_after_discount=flt(frm.doc.item_price-frm.doc.discount_amount)
 				frm.set_value('item_price_after_discount',item_price_after_discount)
+				calculate_vat_amount(frm)
 				let net_amount=item_price_after_discount+frm.doc.vat_amount
 				frm.set_value('net_amount',flt(net_amount))
 				frm.set_value('discount_percent',flt((discount_amount/frm.doc.item_price)*100))
@@ -28,6 +30,9 @@ frappe.ui.form.on('Operation CT', {
 		}
 	},
 	item_price: function (frm) {
+		if (frm.doc.discount_amount==0 && frm.doc.discount_percent=='0') {
+			frm.doc.item_price_after_discount=frm.doc.item_price
+		}
 		calculate_vat_amount(frm)
 	
 	},
@@ -94,7 +99,7 @@ function calculate_vat_amount(frm) {
 			item_template_name: frm.doc.vat_tax_template
 		}).then(r => {
 				let vat_percentage = r.message
-				let vat_amount = flt(frm.doc.item_price * vat_percentage / 100.0)
+				let vat_amount = flt(frm.doc.item_price_after_discount * vat_percentage / 100.0)
 				frm.set_value('vat_amount', vat_amount)
 				calculate_net_amount(frm)
 		})

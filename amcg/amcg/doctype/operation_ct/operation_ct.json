@@ -105,6 +105,7 @@
    "reqd": 1
   },
   {
+   "depends_on": "eval:doc.item_group",
    "fieldname": "item_code",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -322,11 +323,12 @@
   {
    "fieldname": "item_price_after_discount",
    "fieldtype": "Currency",
-   "label": "Item Price After Discount"
+   "label": "Item Price After Discount",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2021-09-06 15:39:40.606180",
+ "modified": "2021-09-07 07:13:57.683264",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "Operation CT",

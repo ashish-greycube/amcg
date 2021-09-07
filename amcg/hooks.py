@@ -6,7 +6,7 @@ app_name = "amcg"
 app_title = "Amcg"
 app_publisher = "GreyCube Technologies"
 app_description = "Customization for AMCG"
-app_icon = "octicon octicon-container"
+app_icon = "fa fa-trophy"
 app_color = "red"
 app_email = "admin@greycube.in"
 app_license = "MIT"
@@ -83,6 +83,7 @@ doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
 doc_events = {
 	"Sales Invoice": {
 		"on_submit": "amcg.amcg.sales_invoice_controller.update_operation_is_invoiced",
+		"on_cancel": "amcg.amcg.sales_invoice_controller.update_operation_is_invoiced"
 	}
 }
 

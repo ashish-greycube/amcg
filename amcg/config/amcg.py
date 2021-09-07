@@ -72,7 +72,7 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "Item Tax Template",
-					"label": _("Item Tax Template for Non-Saudi"),
+					"label": _("Item Tax Template"),
 					"description": _("Item Tax Template"),
 					"hide_count": False
 				}				
