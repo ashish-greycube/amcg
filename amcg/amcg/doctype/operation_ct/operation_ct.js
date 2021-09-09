@@ -1,7 +1,42 @@
 // Copyright (c) 2021, GreyCube Technologies and contributors
 // For license information, please see license.txt
+var sourceImageTop ;
+var targetRootTop;
+
+var sourceImageBottom ;
+var targetRootBottom;
 
 frappe.ui.form.on('Operation CT', {
+	onload_post_render: function(frm) {
+    // Top
+		$(frm.fields_dict['top_body'].wrapper)
+    .html('<div  style="position: relative; display: flex;flex-direction: column;align-items: center;justify-content: center;padding-top: 50px;"> \
+    <img  id="sourceImageTop"   src="/assets/amcg/image/top.png" style="max-width: 430px; max-height: 80%;"  crossorigin="anonymous" /> \
+    <img  id="sampleImageTop"   src="/assets/amcg/image/top.png"  style="max-width: 430px; max-height: 100%; position: absolute;" crossorigin="anonymous" /> \
+    </div>');
+
+    setSourceImageTop(document.getElementById("sourceImageTop"));
+
+    const sampleImageTop = document.getElementById("sampleImageTop");
+    sampleImageTop.addEventListener("click", () => {
+      showMarkerAreaTop(sampleImageTop);
+    });  
+		
+		// Bottom
+		$(frm.fields_dict['bottom_body'].wrapper)
+    .html('<div  style="position: relative; display: flex;flex-direction: column;align-items: center;justify-content: center;padding-top: 50px;"> \
+    <img  id="sourceImageBottom"   src="/assets/amcg/image/bottom.png" style="max-width: 430px; max-height: 80%;"  crossorigin="anonymous" /> \
+    <img  id="sampleImageBottom"   src="/assets/amcg/image/bottom.png"  style="max-width: 430px; max-height: 100%; position: absolute;" crossorigin="anonymous" /> \
+    </div>');
+
+    setSourceImageBottom(document.getElementById("sourceImageBottom"));
+
+    const sampleImageBottom = document.getElementById("sampleImageBottom");
+    sampleImageBottom.addEventListener("click", () => {
+      showMarkerAreaBottom(sampleImageBottom);
+    });  		
+
+  },
 	discount_percent: function(frm) {
 		frm.via_discount_percentage = true;
 			let discount_amount=flt((frm.doc.item_price*frm.doc.discount_percent)/100)
@@ -162,4 +197,59 @@ function set_price_list(frm) {
 	}
 
 
+}
+// Top
+function setSourceImageTop(source) {
+  sourceImageTop = source;
+  targetRootTop = source.parentElement;
+}
+function showMarkerAreaTop(target) {
+  const markerArea = new markerjs2.MarkerArea(sourceImageTop);
+    markerArea.renderImageQuality = 0.5;
+    markerArea.renderImageType = 'image/jpeg';
+
+  // since the container div is set to position: relative it is now our positioning root
+  // end we have to let marker.js know that
+  markerArea.targetRoot = targetRootTop;
+  markerArea.addRenderEventListener((imgURL, state) => {
+    target.src = imgURL;
+    // save the state of MarkerArea
+    cur_frm.doc.top_body_annotation=JSON.stringify(state)
+   
+    cur_frm.set_value('annotated_top_body_image', imgURL)
+    cur_frm.save()
+  });
+  markerArea.show();
+  // if previous state is present - restore it
+  if (cur_frm.doc.top_body_annotation) {
+    markerArea.restoreState(JSON.parse(cur_frm.doc.top_body_annotation));
+  }
+}
+
+// Bottom
+function setSourceImageBottom(source) {
+  sourceImageBottom = source;
+  targetRootBottom = source.parentElement;
+}
+function showMarkerAreaBottom(target) {
+  const markerArea = new markerjs2.MarkerArea(sourceImageBottom);
+    markerArea.renderImageQuality = 0.5;
+    markerArea.renderImageType = 'image/jpeg';
+
+  // since the container div is set to position: relative it is now our positioning root
+  // end we have to let marker.js know that
+  markerArea.targetRoot = targetRootBottom;
+  markerArea.addRenderEventListener((imgURL, state) => {
+    target.src = imgURL;
+    // save the state of MarkerArea
+    cur_frm.doc.bottom_body_annotation=JSON.stringify(state)
+   
+    cur_frm.set_value('annotated_bottom_body_image', imgURL)
+    cur_frm.save()
+  });
+  markerArea.show();
+  // if previous state is present - restore it
+  if (cur_frm.doc.bottom_body_annotation) {
+    markerArea.restoreState(JSON.parse(cur_frm.doc.bottom_body_annotation));
+  }
 }

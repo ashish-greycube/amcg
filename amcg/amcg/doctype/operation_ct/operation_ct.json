@@ -47,7 +47,15 @@
   "observation",
   "location",
   "first_calculation_after_intervention",
-  "amended_from"
+  "amended_from",
+  "body_image_section",
+  "top_body",
+  "top_body_annotation",
+  "annotated_top_body_image",
+  "column_break_46",
+  "bottom_body",
+  "bottom_body_annotation",
+  "annotated_bottom_body_image"
  ],
  "fields": [
   {
@@ -325,10 +333,49 @@
    "fieldtype": "Currency",
    "label": "Item Price After Discount",
    "read_only": 1
+  },
+  {
+   "fieldname": "body_image_section",
+   "fieldtype": "Section Break",
+   "label": "Draw of access by vascular surgeon (cannulation recommendations):"
+  },
+  {
+   "fieldname": "top_body",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "column_break_46",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bottom_body",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "top_body_annotation",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "bottom_body_annotation",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "annotated_top_body_image",
+   "fieldtype": "Attach Image",
+   "hidden": 1
+  },
+  {
+   "fieldname": "annotated_bottom_body_image",
+   "fieldtype": "Attach Image",
+   "hidden": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2021-09-07 07:13:57.683264",
+ "modified": "2021-09-09 15:18:04.959282",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "Operation CT",
