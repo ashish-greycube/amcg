@@ -62,6 +62,7 @@ frappe.ui.form.on('Operation CT', {
 	item_code: function (frm) {
 		if (frm.doc.item_code) {
 			get_item_price(frm)
+			fill_operation_items(frm)
 		}
 	},
 	item_price: function (frm) {
@@ -103,6 +104,14 @@ frappe.ui.form.on('Operation CT', {
 		}
 	}	
 });
+function fill_operation_items(frm) {
+	frappe.call('amcg.amcg.doctype.operation_ct.operation_ct.get_product_bundle_items', {
+		item_code: frm.doc.item_code
+	}).then(r => {
+			let operation_items = r.message
+			frm.set_value('operation_item', operation_items)
+	})	
+}
 
 function get_item_price(frm) {
 	frappe.call({

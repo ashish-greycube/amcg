@@ -55,6 +55,12 @@ def get_tax_rate_for_item_template(item_template_name):
 
 @frappe.whitelist()
 def make_operation(source_name, target_doc=None):
+	from amcg.amcg.doctype.operation_ct.operation_ct import get_product_bundle_items
+	def postprocess(source, target):
+		product_bundle_items=get_product_bundle_items(source.item_code)
+		for item in product_bundle_items:
+			target.append('operation_item',item)
+
 	doc = get_mapped_doc("Booking CT", source_name, {
 		"Booking CT": {
 			"doctype": "Operation CT",
@@ -62,6 +68,6 @@ def make_operation(source_name, target_doc=None):
 				"docstatus": ["=", 1]
 			}
 		}
-	}, target_doc)
+	}, target_doc,postprocess)
 
 	return doc	

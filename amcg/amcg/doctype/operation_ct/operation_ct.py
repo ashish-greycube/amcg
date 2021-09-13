@@ -10,6 +10,7 @@ from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from erpnext.stock.get_item_details import get_item_tax_map
 
+
 class OperationCT(Document):
 	def on_submit(self):
 		if len(self.operation_item)>0:
@@ -137,3 +138,15 @@ def make_sales_invoice_for_monthly_per_operation(source_name, target_doc=None, i
 	}, target_doc, postprocess, ignore_permissions=ignore_permissions)
 
 	return doclist		
+
+@frappe.whitelist()
+def get_product_bundle_items(item_code):
+	# from erpnext.stock.doctype.packed_item.packed_item import get_product_bundle_items
+	return frappe.db.sql("""select t1.item_code,i.item_name,t1.qty, t1.uom, i.stock_uom,t1.description
+		from `tabProduct Bundle Item` t1
+		inner join `tabProduct Bundle` t2
+		on t1.parent = t2.name 
+		inner join `tabItem` i 
+		on i.item_code=t2.name
+		where t2.new_item_code=%s 
+		order by t1.idx""", item_code, as_dict=1)
