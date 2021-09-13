@@ -142,11 +142,14 @@ def make_sales_invoice_for_monthly_per_operation(source_name, target_doc=None, i
 @frappe.whitelist()
 def get_product_bundle_items(item_code):
 	# from erpnext.stock.doctype.packed_item.packed_item import get_product_bundle_items
-	return frappe.db.sql("""select t1.item_code,i.item_name,t1.qty, t1.uom, i.stock_uom,t1.description
+	default_company = frappe.db.get_single_value('Global Defaults', 'default_company')
+	return frappe.db.sql("""select t1.item_code,i.item_name,t1.qty, t1.uom, i.stock_uom,t1.description,id.default_warehouse as warehouse
 		from `tabProduct Bundle Item` t1
 		inner join `tabProduct Bundle` t2
 		on t1.parent = t2.name 
 		inner join `tabItem` i 
 		on i.item_code=t2.name
+		LEFT JOIN `tabItem Default` id 
+		ON id.parent=i.name and id.company=%s
 		where t2.new_item_code=%s 
-		order by t1.idx""", item_code, as_dict=1)
+		order by t1.idx""", (default_company,item_code), as_dict=1)
