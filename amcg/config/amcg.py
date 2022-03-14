@@ -25,9 +25,9 @@ def get_data():
 				}	,
 				{
 					"type": "doctype",
-					"name": "Sales Invoice",
-					"label": _("Sales Invoice"),
-					"description": _("Sales Invoice"),
+					"name": "Purchase Invoice",
+					"label": _("Purchase Invoice"),
+					"description": _("Purchase Invoice"),
 					"hide_count": False
 				}										
 			]
@@ -45,9 +45,9 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Customer",
-					"label": _("Customer"),
-					"description": _("Customer"),
+					"name": "Supplier",
+					"label": _("Supplier"),
+					"description": _("Supplier"),
 					"hide_count": False
 				},
 				{

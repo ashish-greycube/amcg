@@ -2,6 +2,9 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Booking CT', {
+	setup:function(frm){
+		frm.set_query('price_list', { 'buying': 1 });		
+	},
 	refresh: function (frm) {
 		if (frm.doc.docstatus==1) {
 			frm.add_custom_button(__('Convert to Operation'),
@@ -28,7 +31,7 @@ frappe.ui.form.on('Booking CT', {
 		calculate_net_amount(frm)
 
 	},
-	setup: function (frm) {
+	onload: function (frm) {
 		filter_item_based_on_item_group(frm)
 		set_price_list(frm)
 		frm.trigger('citizenship')
@@ -36,7 +39,7 @@ frappe.ui.form.on('Booking CT', {
 	item_group: function (frm) {
 		filter_item_based_on_item_group(frm)
 	},
-	customer: function (frm) {
+	supplier: function (frm) {
 		set_price_list(frm)
 	},
 	vat_tax_template: function (frm) {
@@ -83,7 +86,7 @@ function get_item_price(frm) {
 		method: 'amcg.amcg.doctype.booking_ct.booking_ct.get_price_list_rate_for',
 		args: {
 			args: {
-				customer: frm.doc.customer,
+				supplier: frm.doc.supplier,
 				price_list: frm.doc.price_list,
 				qty: '1',
 				transaction_date: frm.doc.booking_date
@@ -117,15 +120,15 @@ function filter_item_based_on_item_group(frm) {
 
 function set_price_list(frm) {
 	let default_price_list
-	if (frm.doc.customer) {
-		frappe.db.get_value('Customer', frm.doc.customer, 'default_price_list')
+	if (frm.doc.supplier) {
+		frappe.db.get_value('Supplier', frm.doc.supplier, 'default_price_list')
 			.then(r => {
 				default_price_list = r.message.default_price_list
 				if (default_price_list==null) {
-					frappe.db.get_single_value('Selling Settings', 'selling_price_list')
-						.then(selling_price_list => {
-							console.log('selling_price_list',selling_price_list)
-							default_price_list = selling_price_list
+					frappe.db.get_single_value('Buying Settings', 'buying_price_list')
+						.then(buying_price_list => {
+							console.log('buying_price_list',buying_price_list)
+							default_price_list = buying_price_list
 							if (default_price_list) {
 								frm.set_value('price_list', default_price_list)
 							}
@@ -136,9 +139,9 @@ function set_price_list(frm) {
 				}
 			})
 	}else{
-		frappe.db.get_single_value('Selling Settings', 'selling_price_list')
-		.then(selling_price_list => {
-			default_price_list = selling_price_list
+		frappe.db.get_single_value('Buying Settings', 'buying_price_list')
+		.then(buying_price_list => {
+			default_price_list = buying_price_list
 			if (default_price_list) {
 				frm.set_value('price_list', default_price_list)
 			}

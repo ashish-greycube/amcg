@@ -27,7 +27,7 @@ app_include_js =  "/assets/amcg/js/markerjs2.js"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
+doctype_js = {"Purchase Invoice" : "public/js/purchase_invoice.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -82,9 +82,9 @@ doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
 
 
 doc_events = {
-	"Sales Invoice": {
-		"on_submit": "amcg.amcg.sales_invoice_controller.update_operation_is_invoiced",
-		"on_cancel": "amcg.amcg.sales_invoice_controller.update_operation_is_invoiced"
+	"Purchase Invoice": {
+		"on_submit": "amcg.amcg.purchase_invoice_controller.update_operation_is_invoiced",
+		"on_cancel": "amcg.amcg.purchase_invoice_controller.update_operation_is_invoiced"
 	}
 }
 

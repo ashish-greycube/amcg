@@ -10,7 +10,7 @@ def update_operation_is_invoiced(self,method):
 			uppaid_operations=frappe.db.get_list('Operation CT', 
 			filters=[
 				['operation_date', 'between', [self.from_operation_date_cf, self.to_operation_date_cf]],
-				['customer','=',self.customer],
+				['supplier','=',self.supplier],
 				['is_invoiced','=',0],
 				['docstatus','=',1]
 			])

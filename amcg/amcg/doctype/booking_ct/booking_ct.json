@@ -7,7 +7,7 @@
  "field_order": [
   "naming_series",
   "booking_date",
-  "customer",
+  "supplier",
   "patient_name",
   "citizenship",
   "file_no",
@@ -41,12 +41,6 @@
    "in_standard_filter": 1,
    "label": "Booking Date",
    "reqd": 1
-  },
-  {
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "label": "Customer",
-   "options": "Customer"
   },
   {
    "fieldname": "patient_name",
@@ -118,7 +112,7 @@
    "options": "Hospital CT"
   },
   {
-   "fetch_from": "customer.contract_type_cf",
+   "fetch_from": "supplier.contract_type_cf",
    "fieldname": "contract_type",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -155,10 +149,16 @@
    "fieldtype": "Link",
    "label": "VAT",
    "options": "Item Tax Template"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
   }
  ],
  "is_submittable": 1,
- "modified": "2021-09-07 07:13:48.883860",
+ "modified": "2022-03-14 18:06:34.511715",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "Booking CT",
@@ -187,7 +187,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Sales User",
+   "role": "Purchase User",
    "share": 1,
    "submit": 1,
    "write": 1
@@ -201,7 +201,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Sales Manager",
+   "role": "Purchase Manager",
    "share": 1,
    "submit": 1,
    "write": 1
@@ -230,6 +230,20 @@
    "read": 1,
    "report": 1,
    "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Purchase Master Manager",
    "share": 1,
    "submit": 1,
    "write": 1

@@ -7,7 +7,7 @@
  "field_order": [
   "naming_series",
   "operation_date",
-  "customer",
+  "supplier",
   "patient_name",
   "citizenship",
   "file_no",
@@ -65,15 +65,6 @@
    "hidden": 1,
    "label": "Series",
    "options": "OP-.YY.-.MM.-.#"
-  },
-  {
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
   },
   {
    "fieldname": "patient_name",
@@ -372,10 +363,17 @@
    "fieldname": "annotated_bottom_body_image",
    "fieldtype": "Attach Image",
    "hidden": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2021-09-09 15:18:04.959282",
+ "modified": "2022-03-14 18:11:48.148949",
  "modified_by": "Administrator",
  "module": "Amcg",
  "name": "Operation CT",
@@ -404,7 +402,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Sales User",
+   "role": "Purchase User",
    "share": 1,
    "submit": 1,
    "write": 1
@@ -418,7 +416,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Sales Manager",
+   "role": "Purchase Manager",
    "share": 1,
    "submit": 1,
    "write": 1
@@ -432,7 +430,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Sales Master Manager",
+   "role": "Purchase Master Manager",
    "share": 1,
    "submit": 1,
    "write": 1

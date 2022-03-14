@@ -20,9 +20,9 @@ class OperationCT(Document):
 			frappe.msgprint(success_msg, title=_('Success'), indicator='green')	
 
 		if self.contract_type	== 'Per-Operation':
-			sales_invoice=self.make_sales_invoice_for_per_operation(self.name)
-			success_msg = _('Sales Invoice {0} created').format(
-				frappe.bold(get_link_to_form('Sales Invoice', sales_invoice)))
+			purchase_invoice=self.make_purchase_invoice_for_per_operation(self.name)
+			success_msg = _('Purchase Invoice {0} created').format(
+				frappe.bold(get_link_to_form('Purchase Invoice', purchase_invoice)))
 			frappe.msgprint(success_msg, title=_('Success'), indicator='green')					
 
 
@@ -59,30 +59,32 @@ class OperationCT(Document):
 		return stock_entry.name
 
 	@frappe.whitelist()
-	def make_sales_invoice_for_per_operation(self,source_name, target_doc=None, ignore_permissions=False):
+	def make_purchase_invoice_for_per_operation(self,source_name, target_doc=None, ignore_permissions=False):
 		default_company = frappe.db.get_single_value('Global Defaults', 'default_company')
 		monthly_fixed_amount_item=frappe.db.get_single_value('AMCG Settings', 'monthly_fixed_amount_item')
 		default_receivable_account = frappe.db.get_value('Company', default_company, 'default_receivable_account')	
 		def postprocess(source, target):
 			# source.company = default_company
-			target.customer=source.customer
+			target.supplier=source.supplier
 			target.contract_type_cf=source.contract_type
 			# target.ignore_pricing_rule=1
 			# target.currency = frappe.get_cached_value('Company',  default_company,  "default_currency")
 			# target.due_date=frappe.utils.nowdate()
 			# target.debit_to=default_receivable_account		
-			si_item =target.append('items')
-			si_item.item_code=monthly_fixed_amount_item
-			si_item.qty=1
-			si_item.rate=source.item_price_after_discount
-			si_item.base_rate=source.item_price_after_discount
-			si_item.item_tax_template=source.vat_tax_template
-			si_item.item_tax_rate=get_item_tax_map(default_company,source.vat_tax_template)
-			si_item.reference_operation_ct=source.name
+			pi_item =target.append('items')
+			pi_item.item_code=monthly_fixed_amount_item
+			pi_item.qty=1
+			pi_item.rate=source.item_price_after_discount
+			pi_item.base_rate=source.item_price_after_discount
+			pi_item.item_tax_template=source.vat_tax_template
+			pi_item.item_tax_rate=get_item_tax_map(default_company,source.vat_tax_template)
+			pi_item.reference_operation_ct=source.name
 			set_missing_values(source, target)
 
 		def set_missing_values(source, target):
 			target.discount_amount=0
+			if source.price_list:
+				target.buying_price_list=source.price_list			
 			target.ignore_pricing_rule = 1
 			target.flags.ignore_permissions = True
 			target.run_method("set_missing_values")
@@ -94,7 +96,7 @@ class OperationCT(Document):
 
 		doclist = get_mapped_doc("Operation CT", source_name, {
 			"Operation CT": {
-				"doctype": "Sales Invoice",
+				"doctype": "Purchase Invoice",
 				"validation": {
 					"docstatus": ["=", 1]
 				}
@@ -104,17 +106,17 @@ class OperationCT(Document):
 		return doclist.name	
 
 @frappe.whitelist()
-def make_sales_invoice_for_monthly_per_operation(source_name, target_doc=None, ignore_permissions=False):
+def make_purchase_invoice_for_monthly_per_operation(source_name, target_doc=None, ignore_permissions=False):
 	default_company = frappe.db.get_single_value('Global Defaults', 'default_company')
 	def postprocess(source, target):
-		si_item =target.append('items')
-		si_item.item_code=source.item_code
-		si_item.qty=1
-		si_item.rate=source.item_price_after_discount
-		si_item.base_rate=source.item_price_after_discount
-		si_item.item_tax_template=source.vat_tax_template
-		si_item.item_tax_rate=get_item_tax_map(default_company,source.vat_tax_template)
-		si_item.reference_operation_ct=source.name
+		pi_item =target.append('items')
+		pi_item.item_code=source.item_code
+		pi_item.qty=1
+		pi_item.rate=source.item_price_after_discount
+		pi_item.base_rate=source.item_price_after_discount
+		pi_item.item_tax_template=source.vat_tax_template
+		pi_item.item_tax_rate=get_item_tax_map(default_company,source.vat_tax_template)
+		pi_item.reference_operation_ct=source.name
 		set_missing_values(source, target)
 
 
@@ -122,6 +124,8 @@ def make_sales_invoice_for_monthly_per_operation(source_name, target_doc=None, i
 	def set_missing_values(source, target):
 		target.contract_type_cf=source.contract_type
 		target.discount_amount=0
+		if source.price_list:
+			target.buying_price_list=source.price_list
 		target.ignore_pricing_rule = 1
 		target.flags.ignore_permissions = True
 		target.run_method("set_missing_values")
@@ -130,7 +134,7 @@ def make_sales_invoice_for_monthly_per_operation(source_name, target_doc=None, i
 
 	doclist = get_mapped_doc("Operation CT", source_name, {
 		"Operation CT": {
-			"doctype": "Sales Invoice",
+			"doctype": "Purchase Invoice",
 			"validation": {
 				"docstatus": ["=", 1]
 			}
