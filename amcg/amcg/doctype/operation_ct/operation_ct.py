@@ -47,6 +47,8 @@ class OperationCT(Document):
 			se_child.uom = frappe.db.get_value('Item', entry.item_code, 'stock_uom')
 			se_child.stock_uom = entry.stock_uom
 			se_child.qty = flt(entry.qty)
+			if entry.get('batch_no_'):
+				se_child.batch_no=entry.batch_no_
 			# in stock uom
 			se_child.conversion_factor = 1
 			# se_child.cost_center = cost_center

@@ -83,6 +83,15 @@ frappe.ui.form.on('Operation CT', {
 		calculate_vat_amount(frm)		
 	},
 	setup: function (frm) {
+		frm.set_query('batch_no_', 'operation_item', function(doc, cdt, cdn) {
+			var d = locals[cdt][cdn];
+			return {
+				filters: {
+					item: d.item_code,
+					disabled:0
+				}
+			}
+		})		
 		filter_item_based_on_item_group(frm)
 		frm.set_query('price_list', { 'buying': 1 });
 		set_price_list(frm)
